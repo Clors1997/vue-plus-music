@@ -31,35 +31,47 @@
       <van-list
         v-model="loading"
         :finished="finished"
-        :finished-text="'~empty~'"
+        finished-text="û�и�����"
         @load="onLoad"
       >
         <van-cell
           v-for="(item, key) in songList"
           :key="key"
+          class="top-title"
           center
-          :title="item.data.albumname"
+          clickable
+          :title="item.data.songname"
           :label="item.data.singer[0].name"
+           @click="findPlay(item)"
         >
           <template #right-icon>
-            <van-icon name="play-circle-o" />
+            <div style="height: 100%;">
+              <van-icon name="ellipsis" class="single-icon" @click.stop="showPanelMethod(item)" />
+            </div>
           </template>
         </van-cell>
       </van-list>
     </div>
+    <van-action-sheet
+      v-model="showPanel"
+      :actions="actions"
+      :round="false"
+      @select="onSelect" />
   </div>
 </template>
 
 <script>
-import { List } from 'vant'
+import { mapMutations } from 'vuex'
+import { List, ActionSheet } from 'vant'
 export default {
   name: 'RankPage',
   components: {
-    [List.name]: List
+    [List.name]: List,
+    [ActionSheet.name]: ActionSheet
   },
   filters: {
     listenCount: num => {
-      return Math.round(num / 1000) / 10 + 'w'
+      return Math.round(num / 1000) / 10 + '万'
     }
   },
   data() {
@@ -71,17 +83,19 @@ export default {
       opacity: 0,
       allList: [],
       loading: false,
-      finished: false
+      finished: false,
+      showPanel: false,
+      temp_value: {},
+      actions: [{ name: '立刻播放' }, { name: '加入列表' }, { name: '关闭' }]
     }
   },
   created() {
-    let param = {
+    this.$store.dispatch('apiFactory', {
       api_key: 'rank_songs',
       data: {
         topid: this.topid
       }
-    }
-    this.$store.dispatch('apiFactory', param).then(response => {
+    }).then(response => {
       this.allList = response.data.songlist
       this.topInfo = response.data.topinfo
       console.log(this.songList)
@@ -100,6 +114,7 @@ export default {
     this.refRankPage = this.$refs.rankPage
   },
   methods: {
+    ...mapMutations(['addSongFirst', 'addSongList']),
     back() {
       this.$router.go(-1)
     },
@@ -114,6 +129,34 @@ export default {
         }
         this.loading = false
       }, 1000)
+    },
+    onSelect(item) {
+      switch(item.name) {
+        case '立刻播放':
+          this.findPlay(this.temp_value)
+          break;
+        case '加入列表':
+          this.addSongList({
+            name: this.temp_value.data.songname,
+            singer: this.temp_value.data.singer[0].name,
+            mid: this.temp_value.data.songmid
+          })
+          break;
+        case '关闭':
+          break;
+      }
+      this.showPanel = false;
+    },
+    findPlay(value) {
+        this.addSongFirst({
+          name: value.data.songname,
+          singer: value.data.singer[0].name,
+          mid: value.data.songmid
+        })
+    },
+    showPanelMethod(value) {
+      this.temp_value = value;
+      this.showPanel = true;
     }
   }
 }
@@ -171,8 +214,9 @@ export default {
       }
     }
   }
-  .song-list {
-    margin-bottom: 65.6px;
+  .single-icon{
+    font-size: 20px;
+    line-height: inherit;
   }
 }
 </style>

@@ -74,11 +74,10 @@ export default {
     setInterval(() => {
       this.rankLoading = false
     }, 1000)
-    let param = {
+    this.$store.dispatch('apiFactory', {
       api_key: 'rank_list',
       data: {}
-    }
-    this.$store.dispatch('apiFactory', param).then(response => {
+    }).then(response => {
       console.log(JSON.parse(response.bodyText).data.topList)
       this.rankList = JSON.parse(response.bodyText).data.topList
     })

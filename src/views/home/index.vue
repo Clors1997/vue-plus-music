@@ -1,11 +1,11 @@
 <template>
   <div class="home">
     <van-search
-      v-model="value"
+      v-model="search_value"
       shape="round"
       :show-action="searchFlag"
       background="#4fc08d"
-      placeholder="请输入搜索关键词"
+      placeholder="搜索 歌曲/专辑/歌手"
       @search="onSearch"
       @click="showSearch"
     >
@@ -17,7 +17,7 @@
         </transition>
       </template>
     </van-search>
-    <search-tab v-if="searchFlag" />
+    <search-tab v-if="searchFlag" :search-result="search_result" />
     <keep-alive>
       <home-tab v-if="!searchFlag" />
     </keep-alive>
@@ -118,19 +118,29 @@ export default {
       show: false,
       calendarShow: false,
       skeletonShow: true,
-      value: '',
+      search_value: '',
+      search_result: {
+      },
       active: 0,
       searchFlag: false,
       searchFlag2: false
     }
   },
-  created() {},
+  created() {
+  },
   methods: {
     showPopup() {
       this.show = true
     },
     onSearch() {
-      this.$toast('查找')
+      this.$store.dispatch('apiFactory', {
+        api_key: "search",
+        data: {
+          key: this.search_value
+        }
+      }).then(response => {
+        this.search_result = response.data.data
+      })
     },
     showSearch() {
       this.searchFlag = true

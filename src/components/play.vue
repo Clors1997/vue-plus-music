@@ -1,6 +1,6 @@
 <template>
   <div class="play">
-    <van-cell center title="入海" label="毛不易">
+    <van-cell center :title="firstSong.name" :label="firstSong.singer">
       <template #icon>
         <van-image
           class="play-image"
@@ -23,7 +23,7 @@
           class="play-icon"
           name="play"
           color="#4fc08d"
-          @click="play(test_url)"
+          @click="play('')"
         />
       </template>
     </van-cell>
@@ -42,27 +42,37 @@ export default {
       }
     }
   },
+  watch:{
+    firstSong: {
+        handler: function(newdata, olddata){
+          console.log(newdata)
+          this.$store.dispatch('apiFactory', {
+            api_key: 'get_url',
+            data: {
+              mid: newdata.mid
+            }
+          }).then(response => {
+            if(response.data.url_mid.data.midurlinfo[0].purl == ''){
+              this.$toast('該歌曲暫未開放o(╥﹏╥)o')
+              this.default()
+            }else{
+              this.play(response.data.url_mid.data.midurlinfo[0].purl)
+            }
+          })
+        },
+        deep: true
+     }
+  },
   computed: {
     ...mapState({
-      playing: state => state.PlayService.playing
+      playing: state => state.PlayService.playing,
+      firstSong: state => state.PlayService.firstSong,
     })
   },
   created() {
-    let param1 = {
-      api_key: 'get_url',
-      data: {
-        mid: '00221jjt01LOTE'
-      }
-    }
-    console.log(param1)
-    this.$store.dispatch('apiFactory', param1).then(response => {
-      console.log(response)
-      this.test_url.url = response.data.url_mid.data.midurlinfo[0].purl;
-      console.log(this.test_url.url)
-    })
   },
   methods: {
-    ...mapMutations(['play', 'pause'])
+    ...mapMutations(['play', 'pause', 'default'])
   }
 }
 </script>

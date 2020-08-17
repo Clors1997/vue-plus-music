@@ -93,11 +93,11 @@ export default {
   },
   search: {
     url: 'https://c.y.qq.com/splcloud/fcgi-bin/smartbox_new.fcg',
-    params: key => {
+    params: data => {
       return {
         is_xml: 0,
         format: 'jsonp',
-        key: key,
+        key: data.key,
         g_tk: 5381,
         loginUin: 0,
         hostUin: 0,
@@ -146,11 +146,11 @@ export default {
   },
   lyric: {
     url: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg',
-    params: data => {
+    params: id => {
       return {
         nobase64: 1,
-        songtype: 0,
-        ...data
+        musicid: id,
+        songtype: 0
       }
     },
     jsonp: 'callback'

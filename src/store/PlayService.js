@@ -1,50 +1,73 @@
-const player = new QMplayer({ target: 'auto' })
-var global_url = ''
-var p = null;
-console.log(Player.TARGET)
-/* IF_TRUE_APP */
-function sMset(url) {
-  soundManager.setup({
+import store from './index'
+soundManager.setup({
     onready: function() {
-      soundManager.createSound({
-        id: 'msg',
-        autoLoad: true,
-        autoPlay: false,
-        url
-      });
+      
+    }
+  });
+function sMset(state, url) {
+  soundManager.destroySound('Clors')
+  soundManager.createSound({
+    id: 'Clors',
+    url: url,
+    autoLoad: true,
+    autoPlay: false,
+    onfinish: function(){
+      store.commit('finish')
     }
   });
 }
-/* END_TRUE_APP */
-player.on('play', () => {
-  console.log(player.data)
-});
-player.on("pause", () => {
-
-});
 export default {
   state: {
-    playing: false
+    playing: false,
+    firstSong: {
+      name: '入海',
+      singer: '毛不易',
+      mid: '00221jjt01LOTE',
+    },
+    defaultSong: {
+      name: '入海',
+      singer: '毛不易',
+      mid: '00221jjt01LOTE'
+    },
+    songList: []
   },
   mutations: {
-    play(state, test_url) {
-      console.log(global_url != test_url.url,1111)
-      // player.play('003O1P6B2NQVF0')
-      /* IF_TRUE_APP */
-      if(global_url != test_url.url){
-        global_url = test_url.url;
-        sMset(test_url.url)
+    addSongList(state, song) {
+      state.songList.unshift({
+        name: song.name,
+        singer: song.singer,
+        mid: song.mid
+      })
+    },
+    addSongFirst(state, song) {
+      state.firstSong.name = song.name
+      state.firstSong.singer = song.singer
+      state.firstSong.mid = song.mid
+    },
+    default(state){
+      state.firstSong.name = state.defaultSong.name
+      state.firstSong.singer = state.defaultSong.singer
+      state.firstSong.mid = state.defaultSong.mid
+      state.playing = false
+    },
+    play(state, url) {
+      if(url != ''){
+        sMset(state, url)
       }
-      soundManager.play('msg');
-      /* END_TRUE_APP */
+      soundManager.play('Clors');
       state.playing = true
     },
     pause(state) {
-      // player.pause()
-      /* IF_TRUE_APP */
-      soundManager.pause('msg');
-      /* END_TRUE_APP */
+      soundManager.pause('Clors');
       state.playing = false
+    },
+    finish(state){
+      if(state.songList.length == 0){
+        state.firstSong = state.defaultSong;
+      }else{
+        state.firstSong = state.songList[0];
+        state.songList.shift()
+      }
     }
   }
 }

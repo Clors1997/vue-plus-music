@@ -5,13 +5,11 @@
         <router-view class="router" />
       </navigation>
     </transition>
-
-    <play />
+    <play></play>
   </div>
 </template>
 <script>
-import Play from '@/components/play.vue'
-
+import Play from "@/components/play"
 export default {
   components: {
     [Play.name]: Play
@@ -30,7 +28,6 @@ export default {
       window.plus.key.addEventListener('backbutton', function() {
         webview.canBack(function(e) {
           if (e.canBack) {
-            that.$toast(e.canBack)
             webview.back()
           } else {
             let first = null
@@ -76,16 +73,13 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-::-webkit-scrollbar {
-  display: none;
-}
+
 /** 解决路由切换动画上下闪动问题 */
 .router {
   position: absolute;
   top: safe-area-inset-top;
   top: env(safe-area-inset-top);
   width: 100%;
-  bottom: 65.6px;
   transition: all 0.377s ease;
   backface-visibility: hidden;
 }
