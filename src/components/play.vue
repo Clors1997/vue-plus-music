@@ -1,42 +1,49 @@
 <template>
-  <div class="play">
-    <van-cell center :title="firstSong.name" :label="firstSong.singer">
-      <template #icon>
-        <van-image
-          class="play-image"
-          :class="playing ? 'play-image-turn' : 'play-image-stop'"
-          fit="cover"
-          round
-          src="https://img.yzcdn.cn/vant/cat.jpeg"
-        />
-      </template>
-      <template #extra>
-        <van-icon
-          v-if="playing"
-          class="play-icon"
-          name="pause"
-          color="#4fc08d"
-          @click="pause"
-        />
-        <van-icon
-          v-else
-          class="play-icon"
-          name="play"
-          color="#4fc08d"
-          @click="play('')"
-        />
-      </template>
-    </van-cell>
+  <div>
+    <div class="play" v-show="ss" @click="ss = false">
+      <van-cell center :title="firstSong.name" :label="firstSong.singer">
+        <template #icon>
+          <van-image
+            class="play-image"
+            :class="playing ? 'play-image-turn' : 'play-image-stop'"
+            fit="cover"
+            round
+            src="https://img.yzcdn.cn/vant/cat.jpeg"
+          />
+        </template>
+        <template #extra>
+          <van-icon
+            v-if="playing"
+            class="play-icon"
+            name="pause"
+            color="#4fc08d"
+            @click="pause"
+          />
+          <van-icon
+            v-else
+            class="play-icon"
+            name="play"
+            color="#4fc08d"
+            @click="play('')"
+          />
+        </template>
+      </van-cell>
+    </div>
+    <play-detail v-show="!ss"></play-detail>
   </div>
 </template>
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-
+import PlayDetail from './playDetail'
 export default {
   name: 'Play',
+  components: {
+    [PlayDetail.name]: PlayDetail
+  },
   data() {
     return {
+      ss: true,
       test_url: {
         url: ''
       }

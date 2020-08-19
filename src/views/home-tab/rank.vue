@@ -1,34 +1,36 @@
 <template>
   <div class="rank">
-    <ul>
-      <li v-for="(item, key) in rankList" :key="key" class="rank-item">
-        <template v-if="rankLoading">
-          <van-skeleton class="skeleton" :row="1" />
-        </template>
-        <template v-else>
-          <div class="rank-media" @click="toRankPage(item.id)">
-            <img v-lazy="item.picUrl" alt="" />
-            <span class="listen-count">
-              {{ item.listenCount | listenCount }}
-            </span>
-          </div>
-          <div class="rank-info" @click="toRankPage(item.id)">
-            <div class="rank-title">
-              {{ item.topTitle }}
+    <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+      <ul>
+        <li v-for="(item, key) in rankList" :key="key" class="rank-item">
+          <template v-if="rankLoading">
+            <van-skeleton class="skeleton" :row="1" />
+          </template>
+          <template v-else>
+            <div class="rank-media" @click="toRankPage(item.id)">
+              <img v-lazy="item.picUrl" alt="" />
+              <span class="listen-count">
+                {{ item.listenCount | listenCount }}
+              </span>
             </div>
-            <div
-              v-for="(song, index) in item.songList"
-              :key="index"
-              class="rank-songs"
-            >
-              {{ index + 1 }}
-              {{ song.songname }}
-              <span class="rank-singername">-{{ song.singername }}</span>
+            <div class="rank-info" @click="toRankPage(item.id)">
+              <div class="rank-title">
+                {{ item.topTitle }}
+              </div>
+              <div
+                v-for="(song, index) in item.songList"
+                :key="index"
+                class="rank-songs"
+              >
+                {{ index + 1 }}
+                {{ song.songname }}
+                <span class="rank-singername">-{{ song.singername }}</span>
+              </div>
             </div>
-          </div>
-        </template>
-      </li>
-    </ul>
+          </template>
+        </li>
+      </ul>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -43,7 +45,8 @@ export default {
   data() {
     return {
       rankList: null,
-      rankLoading: true
+      rankLoading: true,
+      isLoading: false
     }
   },
   created: function() {
@@ -71,20 +74,30 @@ export default {
         type: 0
       }
     ]
-    setInterval(() => {
-      this.rankLoading = false
-    }, 1000)
-    this.$store.dispatch('apiFactory', {
-      api_key: 'rank_list',
-      data: {}
-    }).then(response => {
-      console.log(JSON.parse(response.bodyText).data.topList)
-      this.rankList = JSON.parse(response.bodyText).data.topList
-    })
+    this.getRankData();
   },
   methods: {
     toRankPage(id) {
       this.$router.push({ name: 'RankPage', params: { id } })
+    },
+    onRefresh() {
+      this.getRankData()
+      setTimeout(() => {
+        this.isLoading = false;
+      }, 800);
+    },
+    getRankData() {
+      this.rankLoading = true;
+      setInterval(() => {
+        this.rankLoading = false
+      }, 1200)
+      this.$store.dispatch('apiFactory', {
+        api_key: 'rank_list',
+        data: {}
+      }).then(response => {
+        console.log(JSON.parse(response.bodyText).data.topList)
+        this.rankList = JSON.parse(response.bodyText).data.topList
+      })
     }
   }
 }
@@ -109,6 +122,7 @@ export default {
 }
 .rank {
   width: 100%;
+  overflow-y: scroll;
   ul {
     padding: 10px;
     display: flex;

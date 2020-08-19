@@ -11,6 +11,16 @@ function sMset(state, url) {
     url: url,
     autoLoad: true,
     autoPlay: false,
+    whileplaying:function(){
+      store.commit(
+        "updateCurrentTime",
+        parseInt(this.position)
+      );
+      store.commit(
+        "updateDuration",
+        parseInt(this.duration)
+      );
+    },
     onfinish: function(){
       store.commit('finish')
     }
@@ -19,12 +29,16 @@ function sMset(state, url) {
 export default {
   state: {
     playing: false,
+    currentTime: 0,
+    duration: 0,
     firstSong: {
+      id: 265408076,
       name: '入海',
       singer: '毛不易',
       mid: '00221jjt01LOTE',
     },
     defaultSong: {
+      id: 265408076,
       name: '入海',
       singer: '毛不易',
       mid: '00221jjt01LOTE'
@@ -32,19 +46,29 @@ export default {
     songList: []
   },
   mutations: {
+    updateCurrentTime (state, time) {
+      state.currentTime = time
+    },
+    updateDuration (state, time) {
+      state.duration = time
+    },
     addSongList(state, song) {
       state.songList.unshift({
+        id: song.id,
         name: song.name,
         singer: song.singer,
         mid: song.mid
       })
+      console.log(state.songList)
     },
     addSongFirst(state, song) {
+      state.firstSong.id = song.id
       state.firstSong.name = song.name
       state.firstSong.singer = song.singer
       state.firstSong.mid = song.mid
     },
     default(state){
+      state.firstSong.id = state.defaultSong.id
       state.firstSong.name = state.defaultSong.name
       state.firstSong.singer = state.defaultSong.singer
       state.firstSong.mid = state.defaultSong.mid
@@ -55,6 +79,7 @@ export default {
         sMset(state, url)
       }
       soundManager.play('Clors');
+      console.log(soundManager)
       state.playing = true
     },
     pause(state) {
@@ -68,6 +93,19 @@ export default {
         state.firstSong = state.songList[0];
         state.songList.shift()
       }
+    }
+  },
+  getters: {
+    currentTime: state =>
+    parseInt(state.currentTime / 60) + ':' + (Array(2).join(0) + (state.currentTime % 60)).slice(-2)
+    ,
+    duration: state =>
+    parseInt(state.duration / 60) + ':' + (Array(2).join(0) + (state.duration % 60)).slice(-2),
+    coverImgUrl:state => {
+      if(typeof state.song.albummid === 'undefined')
+        return def.DEFAULT_IMG
+      else
+        return "https://y.gtimg.cn/music/photo_new/T002R500x500M000"+state.song.albummid+".jpg"
     }
   }
 }

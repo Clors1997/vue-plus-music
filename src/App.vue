@@ -55,11 +55,20 @@ export default {
     /* END_TRUE_APP */
   },
   created() {
-    this.$navigation.on('forward', () => {
-      this.transitionName = 'slide-right'
+    this.$navigation.on('forward', (to, from) => {
+      if(to.route.meta.transitionName != undefined){
+        this.transitionName = to.route.meta.transitionName
+      }else{
+        this.transitionName = 'slide-right'
+      }
     })
-    this.$navigation.on('back', () => {
-      this.transitionName = 'slide-left'
+    this.$navigation.on('back', (to, from) => {
+      console.log(from.route.meta.transitionName)
+      if(from.route.meta.transitionName != undefined){
+        this.transitionName = from.route.meta.transitionName
+      }else{
+        this.transitionName = 'slide-left'
+      }
     })
   }
 }
@@ -67,7 +76,6 @@ export default {
 
 <style lang="less">
 #app {
-  height: 100vh;
   font-family: PingFangSC-Regular;
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
@@ -79,6 +87,7 @@ export default {
   position: absolute;
   top: safe-area-inset-top;
   top: env(safe-area-inset-top);
+  margin-bottom: 66px;
   width: 100%;
   transition: all 0.377s ease;
   backface-visibility: hidden;

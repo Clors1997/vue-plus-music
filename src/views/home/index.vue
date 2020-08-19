@@ -3,24 +3,22 @@
     <van-search
       v-model="search_value"
       shape="round"
-      :show-action="searchFlag"
+      :show-action="routerName == 'home_search'"
       background="#4fc08d"
       placeholder="搜索 歌曲/专辑/歌手"
+      :readonly="routerName != 'home_search'"
       @search="onSearch"
       @click="showSearch"
     >
       <template #action>
         <transition name="van-slide-right">
-          <div v-if="searchFlag2" class="search-cancel" @click="closeSearch">
+          <div v-if="routerName == 'home_search'" class="search-cancel" @click="closeSearch">
             取消
           </div>
         </transition>
       </template>
     </van-search>
-    <search-tab v-if="searchFlag" :search-result="search_result" />
-    <keep-alive>
-      <home-tab v-if="!searchFlag" />
-    </keep-alive>
+    <router-view :search-result="search_result" />
     <!-- <van-list>
       <van-cell title="使用日期工具类" :value="`今天是${currentDate}`" />
       <van-cell title="你再看，地址栏有一个?VNK=xxx,这是路由缓存" />
@@ -123,10 +121,13 @@ export default {
       },
       active: 0,
       searchFlag: false,
-      searchFlag2: false
+      searchFlag2: false,
+      routerName: this.$route.name,
+      search_read: false
     }
   },
   created() {
+    console.log('home create')
   },
   methods: {
     showPopup() {
@@ -143,18 +144,10 @@ export default {
       })
     },
     showSearch() {
-      this.searchFlag = true
-      let that = this
-      setTimeout(function() {
-        that.searchFlag2 = true
-      }, 0)
+      this.$router.push({ name: 'home_search', params: {  } })
     },
     closeSearch() {
-      this.searchFlag2 = false
-      let that = this
-      setTimeout(function() {
-        that.searchFlag = false
-      }, 200)
+      this.$router.back(-1)
     },
     loadingTest() {
       const loading = this.$loading()

@@ -14,6 +14,11 @@ export default {
     apiFactory(store, { api_key, data }) {
       console.log(api_key, data)
       return apiFactoryBuild(api_key, data)
+    },
+    getLyric({},id){
+          return Vue.http.jsonp('https://api.darlin.me/music/lyric/'+id+'/',{
+            jsonp:'callback'
+          })
     }
   }
 }

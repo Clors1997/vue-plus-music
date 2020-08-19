@@ -125,7 +125,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .re {
   font-size: 12px;
   text-align: center;

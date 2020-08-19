@@ -11,7 +11,9 @@ import {
   Lazyload,
   Toast,
   Skeleton,
-  Sticky
+  Sticky,
+  PullRefresh,
+  Slider
 } from 'vant'
 const vantCompanies = [
   Popup,
@@ -26,7 +28,7 @@ const vantCompanies = [
   Skeleton,
   Sticky
 ]
-const vantUses = [Lazyload, Toast]
+const vantUses = [Lazyload, Toast, PullRefresh, Sticky, Slider]
 export default {
   install(Vue) {
     vantCompanies.forEach(component => {

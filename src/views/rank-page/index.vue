@@ -42,7 +42,7 @@
           clickable
           :title="item.data.songname"
           :label="item.data.singer[0].name"
-           @click="findPlay(item)"
+           @click="findPlay($event, item)"
         >
           <template #right-icon>
             <div style="height: 100%;">
@@ -112,6 +112,7 @@ export default {
   },
   mounted() {
     this.refRankPage = this.$refs.rankPage
+   
   },
   methods: {
     ...mapMutations(['addSongFirst', 'addSongList']),
@@ -133,10 +134,11 @@ export default {
     onSelect(item) {
       switch(item.name) {
         case '立刻播放':
-          this.findPlay(this.temp_value)
+          this.findPlayNotEl(this.temp_value)
           break;
         case '加入列表':
           this.addSongList({
+            id: this.temp_value.data.songid,
             name: this.temp_value.data.songname,
             singer: this.temp_value.data.singer[0].name,
             mid: this.temp_value.data.songmid
@@ -147,9 +149,19 @@ export default {
       }
       this.showPanel = false;
     },
-    findPlay(value) {
+    findPlay(e, value) {
+        this.showA(e)
         this.addSongFirst({
+          id: value.data.songid,
           name: value.data.songname,
+          singer: value.data.singer[0].name,
+          mid: value.data.songmid
+        })
+    },
+    findPlayNotEl(value) {
+        this.addSongFirst({
+          id: value.data.songid,
+          name: value.data.songid,
           singer: value.data.singer[0].name,
           mid: value.data.songmid
         })
@@ -157,6 +169,25 @@ export default {
     showPanelMethod(value) {
       this.temp_value = value;
       this.showPanel = true;
+    },
+    showA(e){
+        let h = document.documentElement.clientHeight || document.body.clientHeight;
+        let $i = $("<span/>").text('♪');
+        let top =  document.body.scrollTop + document.documentElement.scrollTop
+        var x = e.pageX,y = e.pageY;
+        $i.css({
+            "z-index": 99999,
+            "bottom": h - y,
+            "left": x,
+            "font-size": "20px",
+            "position": "absolute",
+            "font-weight": "bold",
+            "color": "#4fc08d"
+        });
+        $("body").append($i);
+        $i.animate({"bottom": 20 - top,"opacity": 0},1700,function() {
+            $i.remove();
+        });
     }
   }
 }
@@ -165,6 +196,7 @@ export default {
 <style scoped lang="less">
 .rank-page {
   height: 2000px;
+  position: relative;
   .header-bar {
     width: 375px;
     height: 40px;
@@ -218,5 +250,23 @@ export default {
     font-size: 20px;
     line-height: inherit;
   }
+  .music-dort{
+    position: absolute;
+    top: 300px;
+    z-index: 1000;
+    left: 32px;
+  }
+}
+.down-enter-active,
+.down-leave-active {
+  will-change: top;
+  transition: all 0.3s;
+  top: 300px;
+}
+.down-enter {
+  top: 300px;
+}
+.down-leave-active {
+  top: 770px;
 }
 </style>

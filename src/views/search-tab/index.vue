@@ -21,33 +21,42 @@
             :key="key"
             center
             :title="item.name+'-'+item.singer"
+            @click="findPlay($event, item)"
           >
             <template #right-icon>
-              <van-icon name="play-circle-o" class="single-icon" @click="findPlay(item)" />
+              <van-icon name="ellipsis" class="single-icon" @click.stop="showPanelMethod(item)" />
             </template>
           </van-cell>
         </div>
       </div>
     </van-list>
+    <van-action-sheet
+      v-model="showPanel"
+      :actions="actions"
+      :round="false"
+      @select="onSelect" />
   </div>
 </template>
 
 <script>
 import { mapMutations } from 'vuex'
-import { List, Cell } from 'vant'
+import { List, ActionSheet } from 'vant'
 
 export default {
   name: 'SearchTab',
   props: [ 'searchResult' ],
   components: {
     [List.name]: List,
-    [Cell.name]: Cell
+    [ActionSheet.name]: ActionSheet
   },
   data() {
     return {
       list: [],
       loading: false,
-      finished: false
+      finished: false,
+      showPanel: false,
+      temp_value: {},
+      actions: [{ name: '立刻播放' }, { name: '加入列表' }, { name: '关闭' }]
     }
   },
   watch: {
@@ -60,8 +69,10 @@ export default {
   created() {
     console.log(this.searchResult)
   },
+  mounted() {
+  },
   methods: {
-    ...mapMutations(['addSongFirst']),
+    ...mapMutations(['addSongFirst', 'addSongList']),
     onLoad() {
       console.log(this.loading)
       if(this.searchResult.length != 0){
@@ -78,12 +89,63 @@ export default {
         this.finished = true
       }, 1000)
     },
-    findPlay(value) {
-        this.addSongFirst({
-          name: value.name,
-          singer: value.singer,
-          mid: value.mid
-        })
+    onSelect(item) {
+      switch(item.name) {
+        case '立刻播放':
+          this.findPlayNotEl(this.temp_value)
+          break;
+        case '加入列表':
+          this.addSongList({
+            id: this.temp_value.id,
+            name: this.temp_value.name,
+            singer: this.temp_value.singer,
+            mid: this.temp_value.mid
+          })
+          break;
+        case '关闭':
+          break;
+      }
+      this.showPanel = false;
+    },
+    findPlay(e, value) {
+      this.showA(e)
+      this.addSongFirst({
+        id: value.id,
+        name: value.name,
+        singer: value.singer,
+        mid: value.mid
+      })
+    },
+    findPlayNotEl(value) {
+      this.addSongFirst({
+        id: value.id,
+        name: value.name,
+        singer: value.singer,
+        mid: value.mid
+      })
+    },
+    showPanelMethod(value) {
+      this.temp_value = value;
+      this.showPanel = true;
+    },
+    showA(e){
+      let h = document.documentElement.clientHeight || document.body.clientHeight;
+      let $i = $("<span/>").text('♪');
+      let top =  document.body.scrollTop + document.documentElement.scrollTop
+      var x = e.pageX,y = e.pageY;
+      $i.css({
+          "z-index": 99999,
+          "bottom": h - y,
+          "left": x,
+          "font-size": "20px",
+          "position": "absolute",
+          "font-weight": "bold",
+          "color": "#4fc08d"
+      });
+      $("body").append($i);
+      $i.animate({"bottom": 20 - top,"opacity": 0},1700,function() {
+          $i.remove();
+      });
     }
   }
 }

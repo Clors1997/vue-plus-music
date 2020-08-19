@@ -15,11 +15,35 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
+    redirect: "home"
+  },
+  {
+    path: '/home',
     name: 'Home',
+    redirect: "home/main",
     component: Home,
     meta: {
       title: '首页'
-    }
+    },
+    children: [
+      {
+        path: "main",
+        name: "home_main",
+        component: () => import("@/views/home-tab"),
+        meta: {
+          title: '首页主內容'
+        }
+      },
+      {
+        path: "search",
+        name: "home_search",
+        component: () => import("@/views/search-tab"),
+        meta: {
+          title: '首页-查找',
+          transitionName: 'van-fade'
+        }
+      }
+    ]
   },
   {
     path: '/RankPage/:id',

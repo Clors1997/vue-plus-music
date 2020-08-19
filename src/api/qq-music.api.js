@@ -146,10 +146,10 @@ export default {
   },
   lyric: {
     url: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg',
-    params: id => {
+    params: data => {
       return {
         nobase64: 1,
-        musicid: id,
+        musicid: data.musicid,
         songtype: 0
       }
     },
