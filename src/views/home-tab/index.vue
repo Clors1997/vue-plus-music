@@ -1,22 +1,19 @@
 <template>
-  <div>
-    <van-sticky>
-      <van-tabs
-        v-model="active"
-        color="#FFF"
-        background="#4fc08d"
-        title-active-color="#FFF"
-        title-inactive-color="#DDD"
-        @change="changeSwipe"
-      >
-        <van-tab title="排行榜">
-          <!-- <rank /> -->
-        </van-tab>
-        <van-tab title="推荐">
-          <!-- <album /> -->
-        </van-tab>
-      </van-tabs>
-    </van-sticky>
+  <div class="home-tab">
+    <div style="height:2000px;"></div>
+    <!-- <van-tabs
+      v-model="active"
+      color="#FFF"
+      background="#4fc08d"
+      title-active-color="#FFF"
+      title-inactive-color="#DDD"
+      @change="changeSwipe"
+    >
+      <van-tab title="排行榜">
+      </van-tab>
+      <van-tab title="推荐">
+      </van-tab>
+    </van-tabs>
     
     <van-swipe
       ref="homeSwipe"
@@ -28,12 +25,12 @@
       @change="changeTab"
     >
       <van-swipe-item>
-        <rank style="height: 100vh;" />
+        <rank style="height: 100%;" />
       </van-swipe-item>
       <van-swipe-item>
-        <album style="height: 100vh;" />
+        <album style="height: 100%;" />
       </van-swipe-item>
-    </van-swipe>
+    </van-swipe> -->
   </div>
 </template>
 
@@ -71,7 +68,10 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="less">
+.home-tab {
+  width: 375px;
+}
 .swiper-slide {
   height:1px !important;
 } 

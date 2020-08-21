@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="play" v-show="ss" @click="ss = false">
+    <div class="play" v-show="!playDetailFlag" @click="enterCache('playDetail')">
       <van-cell center :title="firstSong.name" :label="firstSong.singer">
         <template #icon>
           <van-image
@@ -17,19 +17,21 @@
             class="play-icon"
             name="pause"
             color="#4fc08d"
-            @click="pause"
+            @click.stop="pause"
           />
           <van-icon
             v-else
             class="play-icon"
             name="play"
             color="#4fc08d"
-            @click="play('')"
+            @click.stop="play('')"
           />
         </template>
       </van-cell>
     </div>
-    <play-detail v-show="!ss"></play-detail>
+    <transition name="van-slide-up">
+      <play-detail v-show="playDetailFlag"></play-detail>
+    </transition>
   </div>
 </template>
 
@@ -74,12 +76,13 @@ export default {
     ...mapState({
       playing: state => state.PlayService.playing,
       firstSong: state => state.PlayService.firstSong,
+      playDetailFlag: state => state.CachePageService.cacheFlag.playDetail,
     })
   },
   created() {
   },
   methods: {
-    ...mapMutations(['play', 'pause', 'default'])
+    ...mapMutations(['play', 'pause', 'default', 'enterCache', 'backCache'])
   }
 }
 </script>

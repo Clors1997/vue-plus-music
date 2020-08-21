@@ -20,13 +20,15 @@
           let that = this
           let pastLyric = []
           let i = 0
+          console.log(this.lyric)
           Object.keys(this.lyric).forEach(function (key) {
             if (key.split(':')
                 .reduce((a, b) =>
-                parseInt(a) * 60 * 100 + b
+                parseInt(a) * 60 * 1000 + b
                   .split('.')
                   .reduce((a, b) =>
-                  parseInt(a) * 100 + parseInt(b))) - 120 <= that.currentTimeStamp) {
+                  parseInt(a) * 1000 + parseInt(b))) <= that.currentTimeStamp) 
+            {
               if (that.lyric[key] !== '\n') pastLyric.push(that.lyric[key])
             } else if (i <= 1 && that.lyric[key] !== '\n') {
               pastLyric.push(that.lyric[key])
@@ -37,8 +39,7 @@
         }
       },
       currentTimeStamp: function () {
-        let t = this.currentTime.split(':')
-        return (parseInt(t[0]) * 60 + parseInt(t[1])) * 100
+        return this.currentTime
       }
     },
     watch: {

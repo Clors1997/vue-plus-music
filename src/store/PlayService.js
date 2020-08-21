@@ -32,10 +32,10 @@ export default {
     currentTime: 0,
     duration: 0,
     firstSong: {
-      id: 265408076,
-      name: '入海',
-      singer: '毛不易',
-      mid: '00221jjt01LOTE',
+      id: 0,
+      name: '暫無',
+      singer: '暫無',
+      mid: '',
     },
     defaultSong: {
       id: 265408076,
@@ -97,10 +97,11 @@ export default {
   },
   getters: {
     currentTime: state =>
-    parseInt(state.currentTime / 60) + ':' + (Array(2).join(0) + (state.currentTime % 60)).slice(-2)
+      parseInt(state.currentTime)
     ,
     duration: state =>
-    parseInt(state.duration / 60) + ':' + (Array(2).join(0) + (state.duration % 60)).slice(-2),
+      state.currentTime/state.duration*100
+    ,
     coverImgUrl:state => {
       if(typeof state.song.albummid === 'undefined')
         return def.DEFAULT_IMG

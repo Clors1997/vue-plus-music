@@ -10,9 +10,11 @@
     </div>
     <van-grid :border="false" :column-num="2">
       <van-grid-item v-for="(item, key) in hotList" :key="key">
-        <van-image :src="item.imgurl" />
-        <div>
-          {{ item.dissname }}
+        <div style="width: 100%;">
+          <van-image fit="contain" :src="item.imgurl" />
+          <div>
+            {{ item.dissname }}
+          </div>
         </div>
       </van-grid-item>
     </van-grid>

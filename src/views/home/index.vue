@@ -1,99 +1,32 @@
 <template>
   <div class="home">
     <van-search
+      style="flex-shrink: 0;"
       v-model="search_value"
       shape="round"
-      :show-action="routerName == 'home_search'"
+      :show-action="searchFlag"
       background="#4fc08d"
       placeholder="搜索 歌曲/专辑/歌手"
-      :readonly="routerName != 'home_search'"
       @search="onSearch"
       @click="showSearch"
     >
       <template #action>
         <transition name="van-slide-right">
-          <div v-if="routerName == 'home_search'" class="search-cancel" @click="closeSearch">
+          <div v-if="searchFlag2" class="search-cancel" @click="closeSearch">
             取消
           </div>
         </transition>
       </template>
     </van-search>
-    <router-view :search-result="search_result" />
-    <!-- <van-list>
-      <van-cell title="使用日期工具类" :value="`今天是${currentDate}`" />
-      <van-cell title="你再看，地址栏有一个?VNK=xxx,这是路由缓存" />
-    </van-list>
-    <van-button plain type="primary" @click="loadingTest">
-      测试按钮
-    </van-button>
-    <van-cell-group title="分组测试">
-      <van-cell
-        title="测试单元格"
-        is-link
-        arrow-direction="down"
-        value="测试内容"
-        @click="showPopup"
-      />
-    </van-cell-group>
-    <van-cell title="单元格" icon="shop-o">
-      <template #right-icon>
-        <van-icon name="search" class="search-icon" />
-      </template>
-    </van-cell>
-    <van-image
-      width="100"
-      height="100"
-      lazy-load
-      :src="require('@/assets/logo.png')"
-    >
-      <template v-slot:loading>
-        <van-loading type="spinner" size="20" />
-      </template>
-      <template v-slot:error>
-        加载失败
-      </template>
-    </van-image>
-    <van-row>
-      <van-col span="8">
-        <van-button plain type="info" @click="loadingTest">
-          加载中
-        </van-button>
-      </van-col>
-      <van-col span="8">
-        <van-button plain type="danger" @click="loadingFail">
-          失败
-        </van-button>
-      </van-col>
-      <van-col span="8">
-        <van-button plain type="primary" @click="loadingSuccess">
-          成功
-        </van-button>
-      </van-col>
-    </van-row>
-    <van-popup
-      v-model="show"
-      closeable
-      close-icon="close"
-      position="bottom"
-      :style="{ height: '30%' }"
-    />
-    <div class="van-ellipsis">
-      这是一段最多显示三行的文字，多余的内容会被省略这是一段最多显示三行的文字，多余的内容会被省略
+    <div style="overflow-y: auto;border: 10px solid lightblue;">
+      <home-tab v-show="!searchFlag"></home-tab>
+      <search-tab v-if="searchFlag" :searchResult="search_result"></search-tab>
     </div>
-    <van-calendar v-model="calendarShow" :show-confirm="false" />
-    <van-button type="primary" to="NoPermission">
-      路由跳转-无权限
-    </van-button>
-    <div v-show="skeletonShow" class="skeleton">
-      <van-skeleton :row="3" row-width="13.33vw" />
-      <van-skeleton :row="3" row-width="13.33vw" />
-      <van-skeleton :row="3" row-width="13.33vw" />
-    </div>
-    -->
   </div>
 </template>
 
 <script>
+import {mapMutations, mapState} from 'vuex'
 import { List, Cell, Notify, Calendar, Skeleton, Search } from 'vant'
 import HomeTab from '@/views/home-tab'
 import searchTab from '@/views/search-tab'
@@ -110,6 +43,11 @@ export default {
     [HomeTab.name]: HomeTab,
     [searchTab.name]: searchTab
   },
+  computed: {
+    ...mapState({
+      searchFlag: state => state.CachePageService.cacheFlag.search,
+    })
+  },
   data() {
     return {
       currentDate: format(new Date(), DATE_FMT),
@@ -120,7 +58,6 @@ export default {
       search_result: {
       },
       active: 0,
-      searchFlag: false,
       searchFlag2: false,
       routerName: this.$route.name,
       search_read: false
@@ -130,6 +67,7 @@ export default {
     console.log('home create')
   },
   methods: {
+    ...mapMutations(['enterCache', 'backCache']),
     showPopup() {
       this.show = true
     },
@@ -144,16 +82,18 @@ export default {
       })
     },
     showSearch() {
-      this.$router.push({ name: 'home_search', params: {  } })
+      this.enterCache('search')
+      let that = this
+      setTimeout(function() {
+        that.searchFlag2 = true
+      }, 0)
     },
     closeSearch() {
-      this.$router.back(-1)
-    },
-    loadingTest() {
-      const loading = this.$loading()
+      this.searchFlag2 = false
+      let that = this
       setTimeout(function() {
-        loading.close()
-      }, 1000)
+        that.backCache('search')
+      }, 300)
     },
     loadingFail() {
       Notify({
@@ -173,6 +113,12 @@ export default {
 <style lang="less" scoped>
 .home {
   font-size: 16px;
+  height: 100vh;
+  width: 375px;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .search-icon {
   font-size: 16px;

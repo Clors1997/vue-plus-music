@@ -137,7 +137,7 @@ export default {
           "z-index": 99999,
           "bottom": h - y,
           "left": x,
-          "font-size": "20px",
+          "font-size": "30px",
           "position": "absolute",
           "font-weight": "bold",
           "color": "#4fc08d"
