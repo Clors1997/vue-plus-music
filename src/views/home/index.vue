@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <van-search
-      style="flex-shrink: 0;"
+      ref="search"
       v-model="search_value"
       shape="round"
       :show-action="searchFlag"
@@ -18,7 +18,7 @@
         </transition>
       </template>
     </van-search>
-    <div style="overflow-y: auto;border: 10px solid lightblue;">
+    <div class="main">
       <home-tab v-show="!searchFlag"></home-tab>
       <search-tab v-if="searchFlag" :searchResult="search_result"></search-tab>
     </div>
@@ -118,11 +118,16 @@ export default {
   display: flex;
   overflow: hidden;
   flex-direction: column;
-  justify-content: space-between;
 }
 .search-icon {
   font-size: 16px;
   line-height: inherit;
+}
+.main {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .skeleton {
   .van-skeleton {

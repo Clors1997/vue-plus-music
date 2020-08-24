@@ -30,6 +30,7 @@ export default {
     /* IF_TRUE_APP */
     let that = this
     this.$plus(function() {
+      
       let webview = window.plus.webview.currentWebview()
       window.plus.key.addEventListener('backbutton', function() {
         if(that.hasCache){
@@ -91,6 +92,7 @@ export default {
 #app {
   font-family: PingFangSC-Regular;
   background-color: #fff;
+  height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -100,7 +102,6 @@ export default {
   position: absolute;
   top: safe-area-inset-top;
   top: env(safe-area-inset-top);
-  margin-bottom: 66px;
   width: 100%;
   transition: all 0.377s ease;
   backface-visibility: hidden;

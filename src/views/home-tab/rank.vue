@@ -122,7 +122,8 @@ export default {
 }
 .rank {
   width: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
+  padding-bottom: 60px;
   ul {
     padding: 10px;
     display: flex;

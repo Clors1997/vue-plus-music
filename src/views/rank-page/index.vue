@@ -121,7 +121,7 @@ export default {
     },
     onLoad() {
       setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 20; i++) {
           if (this.songList.length >= this.allList.length) {
             this.finished = true
             break

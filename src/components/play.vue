@@ -28,6 +28,7 @@
           />
         </template>
       </van-cell>
+      
     </div>
     <transition name="van-slide-up">
       <play-detail v-show="playDetailFlag"></play-detail>

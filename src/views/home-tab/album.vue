@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="album">
     <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
       <van-swipe-item v-for="(item, key) in swipeList" :key="key">
         <img v-lazy="item.pic" class="swipe-img" />
@@ -128,6 +128,10 @@ export default {
 </script>
 
 <style scoped>
+.album{
+  overflow-y: auto;
+  padding-bottom: 60px;
+}
 .re {
   font-size: 12px;
   text-align: center;
