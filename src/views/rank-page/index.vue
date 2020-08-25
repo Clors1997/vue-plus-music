@@ -1,5 +1,6 @@
 <template>
   <div ref="rankPage" class="rank-page">
+    <div class="in-rank-page">
     <van-sticky :container="refRankPage">
       <div
         id="singer-header"
@@ -51,6 +52,7 @@
           </template>
         </van-cell>
       </van-list>
+    </div>
     </div>
     <van-action-sheet
       v-model="showPanel"
@@ -195,8 +197,17 @@ export default {
 
 <style scoped lang="less">
 .rank-page {
-  height: 2000px;
-  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  height: 100vh;
+  
+  .in-rank-page {
+    overflow-y: auto;
+    position: relative;
+    padding-bottom: 66px;
+  }
+  
   .header-bar {
     width: 375px;
     height: 40px;

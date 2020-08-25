@@ -30,7 +30,52 @@ export default {
     /* IF_TRUE_APP */
     let that = this
     this.$plus(function() {
-      
+      // var barcode = null;
+      // // 创建Barcode扫码控件
+      // function createBarcode() {
+      // 	if(!barcode){
+      // 		barcode = window.plus.barcode.create('barcode', [plus.barcode.QR], {
+      // 			top: '0px',
+      //       left:'0px',
+      // 			width: '100%',
+      //       height: '100vh',
+      // 			position: 'static'
+      // 		});
+      //     barcode.onmarked = function(type, code, file){
+      //       barcode.close();
+      //     	that.$toast(code)
+      //       window.plus.webview.create( code );
+      //     }
+      // 		window.plus.webview.currentWebview().append(barcode);
+      // 	}
+      // 	barcode.start();
+      // }
+      // createBarcode();
+      // // 更新Barcode扫码控件
+      // function updateBarcode() {
+      // 	barcode.setStyle({
+      // 		top:'200px'		// 调整扫码控件的位置
+      // 	});
+      // }
+      function onNetChange(){
+        var nt = plus.networkinfo.getCurrentType();
+        switch (nt){
+            case plus.networkinfo.CONNECTION_ETHERNET:
+            case plus.networkinfo.CONNECTION_WIFI:
+            that.$toast("Switch to Wifi networks!"); 
+            break; 
+            case plus.networkinfo.CONNECTION_CELL2G:
+            case plus.networkinfo.CONNECTION_CELL3G:
+            case plus.networkinfo.CONNECTION_CELL4G:
+            that.$toast("Switch to Cellular networks!");  
+            break; 
+            default:
+            that.$toast("Not networks!"); 
+            break;
+        }
+      }
+      onNetChange();
+      document.addEventListener("netchange", onNetChange, false);
       let webview = window.plus.webview.currentWebview()
       window.plus.key.addEventListener('backbutton', function() {
         if(that.hasCache){

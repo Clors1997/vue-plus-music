@@ -5,7 +5,7 @@
         <van-icon name="arrow-down" @click="backCache('playDetail')" />
       </div>
       <van-image width="100vw" src="https://img.yzcdn.cn/vant/cat.jpeg" @click="backCache('playDetail')" />
-      <van-slider v-model="duration" class="music-slider" bar-height="1.5vw">
+      <van-slider :value="duration" class="music-slider" bar-height="1.5vw">
        <template #button>
           <div class="custom-button">
             
