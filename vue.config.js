@@ -25,29 +25,29 @@ module.exports = {
     config.module
       .rule('vue')
       .use('js-nesting-conditional-compile-loader')
-        .loader('js-nesting-conditional-compile-loader')
-        .tap(() => {
-          let options = {
-            isDebug: true,
-            MY: false,
-            DESKTOP: false,
-            APP: true
-          }
-          return options
-        })
+      .loader('js-nesting-conditional-compile-loader')
+      .tap(() => {
+        let options = {
+          isDebug: true,
+          MY: false,
+          DESKTOP: false,
+          APP: true
+        }
+        return options
+      })
     config.module
       .rule('js')
       .use('js-nesting-conditional-compile-loader')
-        .loader('js-nesting-conditional-compile-loader')
-        .tap(() => {
-          let options = {
-            isDebug: true,
-            MY: false,
-            DESKTOP: false,
-            APP: true
-          }
-          return options
-        })
+      .loader('js-nesting-conditional-compile-loader')
+      .tap(() => {
+        let options = {
+          isDebug: true,
+          MY: false,
+          DESKTOP: false,
+          APP: true
+        }
+        return options
+      })
 
     webpackConfig(config)
   },

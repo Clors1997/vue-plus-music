@@ -1,33 +1,31 @@
 <template>
   <div ref="container" class="home-tab">
-      <van-tabs
-        v-model="active"
-        color="#FFF"
-        background="#4fc08d"
-        title-active-color="#FFF"
-        title-inactive-color="#DDD"
-        @change="changeSwipe"
-      >
-        <van-tab title="排行榜">
-        </van-tab>
-        <van-tab title="推荐">
-        </van-tab>
-      </van-tabs>
-      <van-swipe
-        ref="homeSwipe"
-        indicator-color="white"
-        :stop-propagation="false"
-        :loop="false"
-        :show-indicators="false"
-        @change="changeTab"
-      >
-        <van-swipe-item>
-          <rank />
-        </van-swipe-item>
-        <van-swipe-item>
-          <album />
-        </van-swipe-item>
-      </van-swipe>
+    <van-tabs
+      v-model="active"
+      color="#FFF"
+      background="#4fc08d"
+      title-active-color="#FFF"
+      title-inactive-color="#DDD"
+      @change="changeSwipe"
+    >
+      <van-tab title="排行榜" />
+      <van-tab title="推荐" />
+    </van-tabs>
+    <van-swipe
+      ref="homeSwipe"
+      indicator-color="white"
+      :stop-propagation="false"
+      :loop="false"
+      :show-indicators="false"
+      @change="changeTab"
+    >
+      <van-swipe-item>
+        <rank />
+      </van-swipe-item>
+      <van-swipe-item>
+        <album />
+      </van-swipe-item>
+    </van-swipe>
   </div>
 </template>
 
@@ -44,7 +42,7 @@ export default {
     [Rank.name]: Rank,
     [Album.name]: Album,
     [Swipe.name]: Swipe,
-    [SwipeItem.name]: SwipeItem,
+    [SwipeItem.name]: SwipeItem
   },
   data() {
     return {
@@ -55,16 +53,16 @@ export default {
   },
   mounted() {
     this.$nextTick(function() {
-      this.container = this.$refs.container;
+      this.container = this.$refs.container
     })
   },
-  methods:{
+  methods: {
     changeTab(index) {
-      this.swipeActive = index;
-      this.active = index;
+      this.swipeActive = index
+      this.active = index
     },
     changeSwipe(index) {
-      if(this.swipeActive != index){
+      if (this.swipeActive != index) {
         this.$refs.homeSwipe.swipeTo(index)
       }
     }
@@ -79,10 +77,10 @@ export default {
   flex-direction: column;
 }
 .swiper-slide {
-  height:1px !important;
-} 
+  height: 1px !important;
+}
 .swiper-slide-active {
-  height:auto !important;
+  height: auto !important;
 }
 .van-swipe-item {
   display: flex;

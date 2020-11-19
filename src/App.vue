@@ -5,20 +5,18 @@
         <router-view class="router" />
       </navigation>
     </transition>
-    <play></play>
+    <play />
   </div>
 </template>
 <script>
-import {mapMutations, mapState, mapGetters} from 'vuex'
-import Play from "@/components/play"
+import { mapMutations, mapGetters } from 'vuex'
+import Play from '@/components/play'
 export default {
   components: {
     [Play.name]: Play
   },
   computed: {
-    ...mapGetters([
-      'hasCache'
-    ])
+    ...mapGetters(['hasCache'])
   },
   data() {
     return {
@@ -57,30 +55,30 @@ export default {
       // 		top:'200px'		// 调整扫码控件的位置
       // 	});
       // }
-      function onNetChange(){
-        var nt = plus.networkinfo.getCurrentType();
-        switch (nt){
-            case plus.networkinfo.CONNECTION_ETHERNET:
-            case plus.networkinfo.CONNECTION_WIFI:
-            that.$toast("Switch to Wifi networks!"); 
-            break; 
-            case plus.networkinfo.CONNECTION_CELL2G:
-            case plus.networkinfo.CONNECTION_CELL3G:
-            case plus.networkinfo.CONNECTION_CELL4G:
-            that.$toast("Switch to Cellular networks!");  
-            break; 
-            default:
-            that.$toast("Not networks!"); 
-            break;
+      function onNetChange() {
+        let nt = window.plus.networkinfo.getCurrentType()
+        switch (nt) {
+          case window.plus.networkinfo.CONNECTION_ETHERNET:
+          case window.plus.networkinfo.CONNECTION_WIFI:
+            that.$toast('Switch to Wifi networks!')
+            break
+          case window.plus.networkinfo.CONNECTION_CELL2G:
+          case window.plus.networkinfo.CONNECTION_CELL3G:
+          case window.plus.networkinfo.CONNECTION_CELL4G:
+            that.$toast('Switch to Cellular networks!')
+            break
+          default:
+            that.$toast('Not networks!')
+            break
         }
       }
-      onNetChange();
-      document.addEventListener("netchange", onNetChange, false);
+      onNetChange()
+      document.addEventListener('netchange', onNetChange, false)
       let webview = window.plus.webview.currentWebview()
       window.plus.key.addEventListener('backbutton', function() {
-        if(that.hasCache){
+        if (that.hasCache) {
           that.clearCache()
-        }else{
+        } else {
           webview.canBack(function(e) {
             if (e.canBack) {
               webview.back()
@@ -112,23 +110,24 @@ export default {
   },
   created() {
     this.$navigation.on('forward', (to, from) => {
-      if(to.route.meta.transitionName != undefined){
+      console.log(from.route.meta.transitionName)
+      if (to.route.meta.transitionName != undefined) {
         this.transitionName = to.route.meta.transitionName
-      }else{
+      } else {
         this.transitionName = 'slide-right'
       }
     })
     this.$navigation.on('back', (to, from) => {
       console.log(from.route.meta.transitionName)
-      if(from.route.meta.transitionName != undefined){
+      if (from.route.meta.transitionName != undefined) {
         this.transitionName = from.route.meta.transitionName
-      }else{
+      } else {
         this.transitionName = 'slide-left'
       }
     })
   },
   methods: {
-    ...mapMutations(['clearCache']),
+    ...mapMutations(['clearCache'])
   }
 }
 </script>

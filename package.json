@@ -17,6 +17,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "dayjs": "^1.8.28",
+    "jquery": "^3.5.1",
     "soundmanager2": "^2.97.20170602",
     "swiper": "^6.1.2",
     "vant": "^2.8.6",
@@ -62,20 +63,5 @@
     "stylelint-prettier": "^1.1.2",
     "stylelint-scss": "^3.17.2",
     "vue-template-compiler": "^2.6.11"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
-  },
-  "lint-staged": {
-    "*.{js,vue}": [
-      "vue-cli-service lint",
-      "git add -A"
-    ],
-    "*.{html,vue,css,sass,scss}": [
-      "yarn stylelint"
-    ]
   }
 }

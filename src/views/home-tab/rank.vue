@@ -74,7 +74,7 @@ export default {
         type: 0
       }
     ]
-    this.getRankData();
+    this.getRankData()
   },
   methods: {
     toRankPage(id) {
@@ -83,21 +83,23 @@ export default {
     onRefresh() {
       this.getRankData()
       setTimeout(() => {
-        this.isLoading = false;
-      }, 800);
+        this.isLoading = false
+      }, 800)
     },
     getRankData() {
-      this.rankLoading = true;
+      this.rankLoading = true
       setInterval(() => {
         this.rankLoading = false
       }, 1200)
-      this.$store.dispatch('apiFactory', {
-        api_key: 'rank_list',
-        data: {}
-      }).then(response => {
-        console.log(JSON.parse(response.bodyText).data.topList)
-        this.rankList = JSON.parse(response.bodyText).data.topList
-      })
+      this.$store
+        .dispatch('apiFactory', {
+          api_key: 'rank_list',
+          data: {}
+        })
+        .then(response => {
+          console.log(JSON.parse(response.bodyText).data.topList)
+          this.rankList = JSON.parse(response.bodyText).data.topList
+        })
     }
   }
 }
@@ -122,10 +124,11 @@ export default {
 }
 .rank {
   width: 100%;
+  height: calc(100vh - 53.97px - 43.98px);
   overflow-y: auto;
-  padding-bottom: 60px;
   ul {
     padding: 10px;
+    padding-bottom: 60px;
     display: flex;
     flex-direction: column;
     list-style: none;

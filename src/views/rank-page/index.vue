@@ -1,68 +1,74 @@
 <template>
   <div ref="rankPage" class="rank-page">
     <div class="in-rank-page">
-    <van-sticky :container="refRankPage">
-      <div
-        id="singer-header"
-        class="header-bar"
-        :style="{
-          backgroundColor: 'rgba(79, 192, 141,' + opacity + ')'
-        }"
-      >
-        <van-icon name="arrow-left" color="#FFF" @click="back" />
-      </div>
-    </van-sticky>
-    <div id="top-info" class="top-info">
-      <van-image class="top-img" width="100vw" :src="topInfo.picDetail" />
-      <van-cell
-        class="top-title"
-        center
-        :title="topInfo.ListName"
-        :label="topInfo.listennum | listenCount"
-      >
-        <template #icon>
-          <van-icon name="fire" class="fire-icon" />
-        </template>
-        <template #right-icon>
-          <van-icon name="play-circle-o" class="start-icon" />
-        </template>
-      </van-cell>
-    </div>
-    <div class="song-list">
-      <van-list
-        v-model="loading"
-        :finished="finished"
-        finished-text="û�и�����"
-        @load="onLoad"
-      >
+      <van-sticky :container="refRankPage">
+        <div
+          id="singer-header"
+          class="header-bar"
+          :style="{
+            backgroundColor: 'rgba(79, 192, 141,' + opacity + ')'
+          }"
+        >
+          <van-icon name="arrow-left" color="#FFF" @click="back" />
+        </div>
+      </van-sticky>
+      <div id="top-info" class="top-info">
+        <van-image class="top-img" width="100vw" :src="topInfo.picDetail" />
         <van-cell
-          v-for="(item, key) in songList"
-          :key="key"
           class="top-title"
           center
-          clickable
-          :title="item.data.songname"
-          :label="item.data.singer[0].name"
-           @click="findPlay($event, item)"
+          :title="topInfo.ListName"
+          :label="topInfo.listennum | listenCount"
         >
+          <template #icon>
+            <van-icon name="fire" class="fire-icon" />
+          </template>
           <template #right-icon>
-            <div style="height: 100%;">
-              <van-icon name="ellipsis" class="single-icon" @click.stop="showPanelMethod(item)" />
-            </div>
+            <van-icon name="play-circle-o" class="start-icon" />
           </template>
         </van-cell>
-      </van-list>
-    </div>
+      </div>
+      <div class="song-list">
+        <van-list
+          v-model="loading"
+          :finished="finished"
+          finished-text="û�и�����"
+          @load="onLoad"
+        >
+          <van-cell
+            v-for="(item, key) in songList"
+            :key="key"
+            class="top-title"
+            center
+            clickable
+            :title="item.data.songname"
+            :label="item.data.singer[0].name"
+            @click="findPlay($event, item)"
+          >
+            <template #right-icon>
+              <div style="height: 100%;">
+                <van-icon
+                  name="ellipsis"
+                  class="single-icon"
+                  @click.stop="showPanelMethod(item)"
+                />
+              </div>
+            </template>
+          </van-cell>
+        </van-list>
+      </div>
     </div>
     <van-action-sheet
       v-model="showPanel"
       :actions="actions"
       :round="false"
-      @select="onSelect" />
+      @select="onSelect"
+    />
   </div>
 </template>
 
 <script>
+import $ from 'jquery'
 import { mapMutations } from 'vuex'
 import { List, ActionSheet } from 'vant'
 export default {
@@ -92,16 +98,18 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('apiFactory', {
-      api_key: 'rank_songs',
-      data: {
-        topid: this.topid
-      }
-    }).then(response => {
-      this.allList = response.data.songlist
-      this.topInfo = response.data.topinfo
-      console.log(this.songList)
-    })
+    this.$store
+      .dispatch('apiFactory', {
+        api_key: 'rank_songs',
+        data: {
+          topid: this.topid
+        }
+      })
+      .then(response => {
+        this.allList = response.data.songlist
+        this.topInfo = response.data.topinfo
+        console.log(this.songList)
+      })
     let that = this
     window.onscroll = function() {
       if (document.getElementById('singer-header')) {
@@ -114,7 +122,6 @@ export default {
   },
   mounted() {
     this.refRankPage = this.$refs.rankPage
-   
   },
   methods: {
     ...mapMutations(['addSongFirst', 'addSongList']),
@@ -134,10 +141,10 @@ export default {
       }, 1000)
     },
     onSelect(item) {
-      switch(item.name) {
+      switch (item.name) {
         case '立刻播放':
           this.findPlayNotEl(this.temp_value)
-          break;
+          break
         case '加入列表':
           this.addSongList({
             id: this.temp_value.data.songid,
@@ -145,51 +152,54 @@ export default {
             singer: this.temp_value.data.singer[0].name,
             mid: this.temp_value.data.songmid
           })
-          break;
+          break
         case '关闭':
-          break;
+        default:
+          break
       }
-      this.showPanel = false;
+      this.showPanel = false
     },
     findPlay(e, value) {
-        this.showA(e)
-        this.addSongFirst({
-          id: value.data.songid,
-          name: value.data.songname,
-          singer: value.data.singer[0].name,
-          mid: value.data.songmid
-        })
+      this.showA(e)
+      this.addSongFirst({
+        id: value.data.songid,
+        name: value.data.songname,
+        singer: value.data.singer[0].name,
+        mid: value.data.songmid
+      })
     },
     findPlayNotEl(value) {
-        this.addSongFirst({
-          id: value.data.songid,
-          name: value.data.songid,
-          singer: value.data.singer[0].name,
-          mid: value.data.songmid
-        })
+      this.addSongFirst({
+        id: value.data.songid,
+        name: value.data.songid,
+        singer: value.data.singer[0].name,
+        mid: value.data.songmid
+      })
     },
     showPanelMethod(value) {
-      this.temp_value = value;
-      this.showPanel = true;
+      this.temp_value = value
+      this.showPanel = true
     },
-    showA(e){
-        let h = document.documentElement.clientHeight || document.body.clientHeight;
-        let $i = $("<span/>").text('♪');
-        let top =  document.body.scrollTop + document.documentElement.scrollTop
-        var x = e.pageX,y = e.pageY;
-        $i.css({
-            "z-index": 99999,
-            "bottom": h - y,
-            "left": x,
-            "font-size": "30px",
-            "position": "absolute",
-            "font-weight": "bold",
-            "color": "#4fc08d"
-        });
-        $("body").append($i);
-        $i.animate({"bottom": 20 - top,"opacity": 0},1700,function() {
-            $i.remove();
-        });
+    showA(e) {
+      let h =
+        document.documentElement.clientHeight || document.body.clientHeight
+      let $i = $('<span/>').text('♪')
+      let top = document.body.scrollTop + document.documentElement.scrollTop
+      let x = e.pageX,
+        y = e.pageY
+      $i.css({
+        'z-index': 99999,
+        bottom: h - y,
+        left: x,
+        'font-size': '30px',
+        position: 'absolute',
+        'font-weight': 'bold',
+        color: '#4fc08d'
+      })
+      $('body').append($i)
+      $i.animate({ bottom: 20 - top, opacity: 0 }, 1700, function() {
+        $i.remove()
+      })
     }
   }
 }
@@ -201,13 +211,13 @@ export default {
   overflow: hidden;
   flex-direction: column;
   height: 100vh;
-  
+
   .in-rank-page {
     overflow-y: auto;
     position: relative;
     padding-bottom: 66px;
   }
-  
+
   .header-bar {
     width: 375px;
     height: 40px;
@@ -257,11 +267,11 @@ export default {
       }
     }
   }
-  .single-icon{
+  .single-icon {
     font-size: 20px;
     line-height: inherit;
   }
-  .music-dort{
+  .music-dort {
     position: absolute;
     top: 300px;
     z-index: 1000;

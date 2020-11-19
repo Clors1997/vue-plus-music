@@ -19,14 +19,14 @@
       </template>
     </van-search>
     <div class="main">
-      <home-tab v-show="!searchFlag"></home-tab>
-      <search-tab v-if="searchFlag" :searchResult="search_result"></search-tab>
+      <home-tab v-show="!searchFlag" />
+      <search-tab v-if="searchFlag" :search-result="search_result" />
     </div>
   </div>
 </template>
 
 <script>
-import {mapMutations, mapState} from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import { List, Cell, Notify, Calendar, Skeleton, Search } from 'vant'
 import HomeTab from '@/views/home-tab'
 import searchTab from '@/views/search-tab'
@@ -45,7 +45,7 @@ export default {
   },
   computed: {
     ...mapState({
-      searchFlag: state => state.CachePageService.cacheFlag.search,
+      searchFlag: state => state.CachePageService.cacheFlag.search
     })
   },
   data() {
@@ -55,8 +55,7 @@ export default {
       calendarShow: false,
       skeletonShow: true,
       search_value: '',
-      search_result: {
-      },
+      search_result: {},
       active: 0,
       searchFlag2: false,
       routerName: this.$route.name,
@@ -72,14 +71,16 @@ export default {
       this.show = true
     },
     onSearch() {
-      this.$store.dispatch('apiFactory', {
-        api_key: "search",
-        data: {
-          key: this.search_value
-        }
-      }).then(response => {
-        this.search_result = response.data.data
-      })
+      this.$store
+        .dispatch('apiFactory', {
+          api_key: 'search',
+          data: {
+            key: this.search_value
+          }
+        })
+        .then(response => {
+          this.search_result = response.data.data
+        })
     },
     showSearch() {
       this.enterCache('search')

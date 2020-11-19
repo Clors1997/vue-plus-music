@@ -10,14 +10,15 @@ module.exports = {
     sourceType: 'module',
     ecmaFeatures:{
       // 支持装饰器
-      legacyDecorators: true
+      legacyDecorators: true,
     }
   },
 
   env: {
     browser: true,
+    jquery: true,
     node: true,
-    es6: true
+    es6: true,
   },
 
   extends: ['plugin:vue/recommended', 'eslint:recommended'],

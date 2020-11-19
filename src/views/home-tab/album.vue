@@ -8,7 +8,7 @@
     <div class="re">
       热门歌单
     </div>
-    <van-grid :border="false" :column-num="2">
+    <van-grid class="album-grid" :border="false" :column-num="2">
       <van-grid-item v-for="(item, key) in hotList" :key="key">
         <div style="width: 100%;">
           <van-image fit="contain" :src="item.imgurl" />
@@ -127,10 +127,14 @@ export default {
 }
 </script>
 
-<style scoped>
-.album{
+<style scoped lang="less">
+.album {
+  height: calc(100vh - 53.97px - 43.98px);
   overflow-y: auto;
   padding-bottom: 60px;
+  .album-grid {
+    padding-bottom: 60px;
+  }
 }
 .re {
   font-size: 12px;
